@@ -67,3 +67,10 @@ ML Patron pre-creates an MLflow Run for each job and injects three environment v
 | `MLFLOW_RUN_ID` | `mlflow.start_run(run_id=os.environ.get("MLFLOW_RUN_ID"))` | `mlflow.start_run()` with a different or no `run_id` |
 
 This is the only way to link your metrics with ML Patron. The same code works locally — when `MLFLOW_RUN_ID` is unset, `start_run()` creates a new run as usual.
+
+## Dry-run Requirements
+
+On [ML Patron](https://mlpatron.com), each Run starts with a **dry-run** to verify your code and estimate costs. To make sure your job runs smoothly, you should:
+
+1. **Call `mlflow.log_metric()` in your training loop** (e.g. `mlflow.log_metric("loss", loss_val, step=epoch)`) — this helps the platform separate startup time from training time for more accurate cost estimates.
+2. **Expose a training-length parameter** (e.g. `epochs`, `max_steps`) in your `MLproject` entry points — this allows the platform to run a shorter version as the dry-run and estimate full training cost by ratio.
