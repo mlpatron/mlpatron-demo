@@ -52,7 +52,7 @@ When you submit a Run on ML Patron, the platform:
 
 ## Docker Image
 
-**Requirement:** `docker_env.image` in `MLproject` must point to a publicly pullable image that has all the dependencies your training script needs (including `mlflow` for logging). The image does **not** need to contain your code — ML Patron clones it into `/workspace` at runtime.
+**Requirement:** `docker_env.image` in `MLproject` must point to a publicly pullable image that has all the dependencies your training script needs (including `mlflow` and `google-cloud-storage` for logging and artifact uploads). The image does **not** need to contain your code — ML Patron clones it into `/workspace` at runtime.
 
 **In this demo**, the `Dockerfile` installs `mlflow`, `matplotlib`, etc. on top of the PyTorch base image. The GitHub Actions workflow (`.github/workflows/docker.yml`) automatically builds and pushes it to `ghcr.io/nblintao/mlpatron-demo`. This is just one way to host your image — any registry works.
 
