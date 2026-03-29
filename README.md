@@ -17,7 +17,7 @@ train.py        # Training script
 ```bash
 # 1. Build the image locally (only builds, no push needed for local dev)
 #    On Apple Silicon Mac, specify --platform since the base image is linux/amd64:
-docker build --platform linux/amd64 -t ghcr.io/nblintao/mlpatron-demo:latest .
+docker build --platform linux/amd64 -t ghcr.io/mlpatron/mlpatron-demo:latest .
 
 # 2. Start a local MLflow server
 mlflow server --port 5002 --host 0.0.0.0 --allowed-hosts "*" \
@@ -28,7 +28,7 @@ mlflow server --port 5002 --host 0.0.0.0 --allowed-hosts "*" \
 docker run --rm --platform linux/amd64 \
   -v "$(pwd)":/workspace \
   -e MLFLOW_TRACKING_URI=http://host.docker.internal:5002 \
-  ghcr.io/nblintao/mlpatron-demo:latest \
+  ghcr.io/mlpatron/mlpatron-demo:latest \
   python train.py --epochs 5 --lr 0.01 --batch_size 64 --hidden_size 128
 ```
 
@@ -54,7 +54,7 @@ When you submit a Run on ML Patron, the platform:
 
 **Requirement:** `docker_env.image` in `MLproject` must point to a publicly pullable image that has all the dependencies your training script needs (including `mlflow` and `google-cloud-storage` for logging and artifact uploads). The image does **not** need to contain your code — ML Patron clones it into `/workspace` at runtime.
 
-**In this demo**, the `Dockerfile` installs `mlflow`, `matplotlib`, etc. on top of the PyTorch base image. The GitHub Actions workflow (`.github/workflows/docker.yml`) automatically builds and pushes it to `ghcr.io/nblintao/mlpatron-demo`. This is just one way to host your image — any registry works.
+**In this demo**, the `Dockerfile` installs `mlflow`, `matplotlib`, etc. on top of the PyTorch base image. The GitHub Actions workflow (`.github/workflows/docker.yml`) automatically builds and pushes it to `ghcr.io/mlpatron/mlpatron-demo`. This is just one way to host your image — any registry works.
 
 ## MLflow Integration
 

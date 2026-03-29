@@ -1,7 +1,7 @@
 name: mlpatron-demo
 
 docker_env:
-  image: ghcr.io/nblintao/mlpatron-demo:latest
+  image: ghcr.io/mlpatron/mlpatron-demo:latest
 
 entry_points:
   main:
