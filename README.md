@@ -74,3 +74,13 @@ On [ML Patron](https://mlpatron.com), each Run starts with a **dry-run** to veri
 
 1. **Call `mlflow.log_metric()` in your training loop** (e.g. `mlflow.log_metric("loss", loss_val, step=epoch)`) — this helps the platform separate startup time from training time for more accurate cost estimates.
 2. **Expose a training-length parameter** (e.g. `epochs`, `max_steps`) in your `MLproject` entry points — this allows the platform to run a shorter version as the dry-run and estimate full training cost by ratio.
+
+## Spot Preemption and Checkpointing
+
+ML Patron runs all jobs on **Spot (preemptible) instances** for lower cost. Spot VMs can be reclaimed by the cloud provider at any time, so your training script should handle this gracefully:
+
+1. **Save checkpoints periodically** (e.g. every N steps) and upload them to MLflow artifacts or a persistent storage location. Local disk is lost when the pod is terminated.
+2. **Handle `SIGTERM`** — Kubernetes sends `SIGTERM` ~30 seconds before a spot preemption `SIGKILL`. Register a signal handler to save a final checkpoint when this happens.
+3. **Support resuming from checkpoints** — so you can restart a preempted run without losing all progress.
+
+See [mlpatron-nanochat](https://github.com/mlpatron/mlpatron-nanochat) for a reference implementation with full SIGTERM handling, checkpoint saving, and MLflow artifact upload on preemption.
